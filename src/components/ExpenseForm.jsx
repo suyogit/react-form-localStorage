@@ -1,32 +1,26 @@
 import { useState } from "react";
-
 const ExpenseForm = ({ setexpense }) => {
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [price, setPrice] = useState("");
+  const [tdata, setTdata] = useState({
+    title: "",
+    category: "",
+    price: "",
+  });
 
   function handlesubmit(e) {
     e.preventDefault();
-    // console.log(e.target)
-    // const data = getFormData(e.target);
+    const {title, category, price}=tdata;
     const data = {
       title,
       category,
-      price
+      price,
     };
     setexpense((prev) => [...prev, { ...data, id: crypto.randomUUID() }]);
-    setPrice('');
-    setCategory('');
-    setTitle('');
+    setTdata({
+      title: "",
+      category: "",
+      price: "",
+    });
   }
-  //   const getFormData = (form) => {
-  //     const formData = new FormData(form);
-  //     const data = {};
-  //     for (const [key, value] of formData.entries()) {
-  //       data[key] = value;
-  //     }
-  //     return data;
-  //   };
 
   return (
     <form className="expense-htmlForm" onSubmit={handlesubmit}>
@@ -35,9 +29,12 @@ const ExpenseForm = ({ setexpense }) => {
         <input
           id="title"
           name="title"
-          value={title}
+          value={tdata.title}
           onChange={(e) => {
-            setTitle(e.target.value);
+            setTdata((prev) => ({
+              ...prev,
+              title: e.target.value,
+            }));
           }}
         />
       </div>
@@ -46,19 +43,22 @@ const ExpenseForm = ({ setexpense }) => {
         <select
           id="category"
           name="category"
-          value={category}
+          value={tdata.category}
           onChange={(e) => {
-            setCategory(e.target.value);
+            setTdata((prev) => ({
+              ...prev,
+              category: e.target.value,
+            }));
           }}
         >
           <option value="" hidden>
             Select Category
           </option>
-          <option value="grocery">Grocery</option>
-          <option value="clothes">Clothes</option>
-          <option value="bills">Bills</option>
-          <option value="education">Education</option>
-          <option value="medicine">Medicine</option>
+          <option value="Grocery">Grocery</option>
+          <option value="Clothes">Clothes</option>
+          <option value="Bills">Bills</option>
+          <option value="Education">Education</option>
+          <option value="Medicine">Medicine</option>
         </select>
       </div>
       <div className="input-container">
@@ -66,10 +66,13 @@ const ExpenseForm = ({ setexpense }) => {
         <input
           id="amount"
           name="price"
-          value={price}
+          value={tdata.price}
           type="number"
           onChange={(e) => {
-            setPrice(e.target.value);
+            setTdata((prev) => ({
+              ...prev,
+              price: e.target.value,
+            }));
           }}
         />
       </div>
@@ -77,5 +80,4 @@ const ExpenseForm = ({ setexpense }) => {
     </form>
   );
 };
-
 export default ExpenseForm;
