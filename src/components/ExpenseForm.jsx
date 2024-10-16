@@ -3,23 +3,49 @@ import Input from "./Input";
 import Select from "./Select";
 const ExpenseForm = ({ setexpense }) => {
   const [error, setError] = useState({});
+  const errors = {
+    title: [
+      { required: true, message: "Title is required." },
+      {
+        minlength: 5,
+        message: "Please enter title greater than 5 letter.",
+      },
+    ],
+    category: [{ required: true, message: "Please select category" }],
+    price: [{ required: true, message: "Please enter price" }],
+    email: [
+      { required: true, message: "Please enter an email" },
+      {
+        pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+        message: "Please enter a valid email",
+      },
+    ],
+  };
   const [tdata, setTdata] = useState({
     title: "",
     category: "",
     price: "",
+    email: "",
   });
 
   function validate(form) {
     const err = {};
-    if (!form.title) {
-      err.title = "Please enter title.";
-    }
-    if (!form.category) {
-      err.category = "Please select category.";
-    }
-    if (!form.price) {
-      err.price = "Please enter price.";
-    }
+    Object.entries(form).forEach(([key, value]) => {
+      errors[key].some((rule) => {
+        if (rule.required && !value) {
+          err[key] = rule.message;
+          return true;
+        }
+        if (rule.minlength && value.length < 5) {
+          err[key] = rule.message;
+          return true;
+        }
+        if (rule.pattern && !rule.pattern.test(value)) {
+          err[key] = rule.message;
+          return true;
+        }
+      });
+    });
     setError(err); // state variable is for using it in below jsx
     return err; // normal variable is used for validating while submitting. because state variable cannot be used, as it is run at last
   }
@@ -33,6 +59,7 @@ const ExpenseForm = ({ setexpense }) => {
       title: "",
       category: "",
       price: "",
+      email: "",
     });
   }
   const handleupdate = (e) => {
@@ -71,6 +98,14 @@ const ExpenseForm = ({ setexpense }) => {
         value={tdata.price}
         onChange={handleupdate}
         error={error.price}
+      />
+      <Input
+        label="Email"
+        id="email"
+        name="email"
+        value={tdata.email}
+        onChange={handleupdate}
+        error={error.email}
       />
       <button className="add-btn">Add</button>
     </form>
