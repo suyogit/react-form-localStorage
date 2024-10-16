@@ -1,18 +1,40 @@
-
+import { useState } from "react";
 const ExpenseTable = ({expenses}) => {
+const [cat, setcat] = useState("")
+
+    const filteredData=cat?
+    expenses.filter((expense)=>(
+        expense.category===cat
+    ))
+    :expenses;
+
+    // console.log(filteredData)
+    const ren=filteredData.map(({id, title, category, price})=>(
+        <tr key={id}>
+        <td>{title}</td>
+        <td>{category}</td>
+        <td>₹{price}</td>
+      </tr>
+    ))
+    function handleChange(e)
+    {
+        setcat(e.target.value)
+        // console.log(e.target.value)
+    }
+  const totalAmount = filteredData.reduce((acc, { price }) => acc + parseFloat(price), 0);
   return (
     <table className="expense-table">
     <thead>
       <tr>
         <th>Title</th>
         <th>
-          <select>
+          <select onChange={handleChange}>
             <option value="">All</option>
-            <option value="grocery">Grocery</option>
-            <option value="clothes">Clothes</option>
-            <option value="bills">Bills</option>
-            <option value="education">Education</option>
-            <option value="medicine">Medicine</option>
+            <option value="Grocery">Grocery</option>
+            <option value="Clothes">Clothes</option>
+            <option value="Bills">Bills</option>
+            <option value="Education">Education</option>
+            <option value="Medicine">Medicine</option>
           </select>
         </th>
         <th className="amount-column">
@@ -45,19 +67,15 @@ const ExpenseTable = ({expenses}) => {
       </tr>
     </thead>
     <tbody>
-  
-     {expenses.map(({id, title, category, price})=>(
-         <tr key={id}>
-         <td>{title}</td>
-         <td>{category}</td>
-         <td>₹{price}</td>
-       </tr>
 
-     ))}
+     {
+     ren
+     }
+    
       <tr>
         <th>Total</th>
         <th></th>
-        <th>₹8100</th>
+        <th>{totalAmount}</th>
       </tr>
     </tbody>
   </table>
