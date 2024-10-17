@@ -130,6 +130,10 @@ main {
     top: 100%;
     line-height: 12px;;
 }
+.sort
+{
+    cursor: pointer;
+}
 @media (max-width: 900px) {
     body {
         margin-inline: 16px;
