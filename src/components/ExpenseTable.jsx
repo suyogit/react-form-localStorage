@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useFilter } from "./hooks/useFilter";
 import ContextMenu from "./ContextMenu";
-const ExpenseTable = ({ expenses ,setexpense}) => {
+const ExpenseTable = ({ expenses ,setexpense, setTdata, setediting}) => {
   const [rowid, setrowid] = useState('')
   const [menuposition, setmenuposition] = useState({})
   const [filteredData, setQuery] = useFilter(expenses, (data) => data.category); //now we can filter on the basis of field that we desire
@@ -14,7 +14,7 @@ const ExpenseTable = ({ expenses ,setexpense}) => {
   );
   return (
     <>
-      <ContextMenu  menuposition={menuposition} setmenuposition={setmenuposition} setexpense={setexpense} expenses={expenses} rowid={rowid}/>
+      <ContextMenu  menuposition={menuposition} setmenuposition={setmenuposition} setexpense={setexpense} expenses={expenses} rowid={rowid} setTdata={setTdata} setediting={setediting}/>
       <table className="expense-table" onClick={()=>setmenuposition({})}>
         <thead>
           <tr>

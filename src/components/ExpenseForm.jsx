@@ -1,33 +1,33 @@
 import { useState } from "react";
 import Input from "./Input";
 import Select from "./Select";
-const ExpenseForm = ({ setexpense }) => {
+const ExpenseForm = ({ setexpense, tdata, setTdata, editing, setediting }) => {
   const [error, setError] = useState({});
   const errors = {
     title: [
       { required: true, message: "Title is required." },
       {
-        minlength: 5,
-        message: "Please enter title greater than 5 letter.",
+        minlength: 2,
+        message: "Please enter title greater than 2 letter.",
       },
     ],
     category: [{ required: true, message: "Please select category" }],
-    price: [{ required: true, message: "Please enter price" }],
-    email: [
-      { required: true, message: "Please enter an email" },
+    price: [
+      { required: true, message: "Please enter price" },
       {
-        pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-        message: "Please enter a valid email",
+        pattern: /^[1-9]\d*(\.\d+)?$/,
+        message: "Please enter a valid number",
       },
     ],
+    // email: [
+    //   { required: true, message: "Please enter an email" },
+    //   {
+    //     pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+    //     message: "Please enter a valid email",
+    //   },
+    // ],
   };
-  const [tdata, setTdata] = useState({
-    title: "",
-    category: "",
-    price: "",
-    email: "",
-  });
-
+  1840;
   function validate(form) {
     const err = {};
     Object.entries(form).forEach(([key, value]) => {
@@ -36,7 +36,7 @@ const ExpenseForm = ({ setexpense }) => {
           err[key] = rule.message;
           return true;
         }
-        if (rule.minlength && value.length < 5) {
+        if (rule.minlength && value.length < rule.minlength) {
           err[key] = rule.message;
           return true;
         }
@@ -54,12 +54,32 @@ const ExpenseForm = ({ setexpense }) => {
     e.preventDefault();
     const err = validate(tdata);
     if (Object.keys(err).length) return;
+
+    if (editing) {
+      setexpense((prev) =>
+        prev.map((row) => {
+          if (row.id === editing) {
+            return { ...tdata, id: editing };
+          }
+          return row;
+        })
+      );
+
+      setTdata({
+        title: "",
+        category: "",
+        price: "",
+      });
+      setediting("");
+      return;
+    }
+
     setexpense((prev) => [...prev, { ...tdata, id: crypto.randomUUID() }]);
     setTdata({
       title: "",
       category: "",
       price: "",
-      email: "",
+      // email: "",
     });
   }
   const handleupdate = (e) => {
@@ -67,7 +87,7 @@ const ExpenseForm = ({ setexpense }) => {
     const { name, value } = e.target;
     setTdata((prev) => ({
       ...prev,
-      [name]: name === "price" ? Number(value) : value,
+      [name]: name === "price" ? value : value,
     }));
   };
   return (
@@ -93,21 +113,21 @@ const ExpenseForm = ({ setexpense }) => {
       <Input
         label="Amount"
         id="amount"
-        type="number"
+        // type="number"
         name="price"
         value={tdata.price}
         onChange={handleupdate}
         error={error.price}
       />
-      <Input
+      {/* <Input
         label="Email"
         id="email"
         name="email"
         value={tdata.email}
         onChange={handleupdate}
         error={error.email}
-      />
-      <button className="add-btn">Add</button>
+      /> */}
+      <button className="add-btn">{editing ? "Save" : "Add"}</button>
     </form>
   );
 };

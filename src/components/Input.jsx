@@ -6,9 +6,9 @@ const Input = ({ label, id, name, value, onChange, error, type }) => {
       <label htmlFor={id}>{label}</label>
       <input
         id={label}
-        type={type}
+        // type={type}
         name={name}
-        value={value}
+        value={value || ""}
         onChange={onChange}
       />
       <p className="error">{error}</p>
