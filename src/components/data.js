@@ -23,5 +23,4 @@ export default [
         category:"Bills",
         price:1100
     }
-
 ]
