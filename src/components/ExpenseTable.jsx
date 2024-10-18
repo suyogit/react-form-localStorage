@@ -121,7 +121,7 @@ const ExpenseTable = ({ expenses, setexpense, setTdata, setediting }) => {
             >
               <td>{title}</td>
               <td>{category}</td>
-              <td>₹{price}</td>
+              <td>रु{price}</td>
             </tr>
           ))}
 
